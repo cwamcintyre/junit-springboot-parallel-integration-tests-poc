@@ -1,9 +1,9 @@
 package org.cmc.integrationTest;
 
+import jakarta.transaction.Transactional;
 import org.cmc.integrationTest.util.BaseIntegrationTest;
-import org.cmc.integrationTest.util.TestDataFactory;
 import org.cmc.integrationTest.util.WithPostgresContainer;
-import org.cmc.testingpoc.entity.TestData;
+import org.cmc.testingpoc.entity.Customer;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,13 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class RunThisInParallelTest extends BaseIntegrationTest {
 
     @Test
+    @Transactional
     void GivenListOfData_whenCountCalled_returnsFiveRecords() {
         // given
-        List<TestData> listOfFive = TestDataFactory.createMultiple(5);
-        testRepository.saveAll(listOfFive);
+        List<Customer> listOfFive = customerFactory.createAndPersistMultiple(5);
 
         // when
-        long count = testRepository.count();
+        long count = customerRepository.count();
 
         // then
         assertEquals(5, count);
